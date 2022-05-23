@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_bottom"
+    app:startDestination="@id/nav_fragment_inicio">
+
+    <fragment
+        android:id="@+id/nav_fragment_inicio"
+        android:name="com.brynnerflores.kytcla.view.curso.FragmentInicio"
+        android:label="Kytcla - Educacion Continua"
+        tools:layout="@layout/fragment_inicio">
+        <action
+            android:id="@+id/action_fragment_inicio_to_fragment_tienda"
+            app:destination="@id/nav_fragment_tienda" />
+        <action
+            android:id="@+id/action_fragment_inicio_to_fragment_perfil"
+            app:destination="@id/nav_fragment_perfil" />
+        <action
+            android:id="@+id/action_nav_fragment_inicio_to_fragment_guardado"
+            app:destination="@id/nav_fragment_guardado" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_fragment_tienda"
+        android:name="com.brynnerflores.kytcla.view.tienda.FragmentTienda"
+        android:label="Tienda Virtual"
+        tools:layout="@layout/fragment_tienda" />
+    <fragment
+        android:id="@+id/nav_fragment_perfil"
+        android:name="com.brynnerflores.kytcla.view.FragmentPerfil"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil" />
+    <fragment
+        android:id="@+id/nav_fragment_guardado"
+        android:name="com.brynnerflores.kytcla.view.guardado.FragmentGuardado"
+        android:label="Elementos Guardados"
+        tools:layout="@layout/fragment_guardado" />
+</navigation>

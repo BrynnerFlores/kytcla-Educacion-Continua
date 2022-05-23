@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="kytcla_primary">#ca1a66</color>
+    <color name="kytcla_primary_variant">#7C113F</color>
+
+    <color name="Grey50">#FAFAFA</color>
+    <color name="Grey100">#F5F5F5</color>
+    <color name="Grey200">#EEEEEE</color>
+    <color name="Grey300">#E0E0E0</color>
+    <color name="Grey400">#BDBDBD</color>
+    <color name="Grey500">#9E9E9E</color>
+    <color name="Grey600">#757575</color>
+    <color name="Grey700">#616161</color>
+    <color name="Grey800">#424242</color>
+    <color name="Grey900">#212121</color>
+
+    <color name="whatsapp">#25D366</color>
+
+    <!-- Here you can add color of your choice  -->
+    <color name="ucrop_color_toolbar">@color/kytcla_primary</color>
+    <color name="ucrop_color_statusbar">@color/kytcla_primary_variant</color>
+    <color name="ucrop_color_widget_active">@color/teal_700</color>
+</resources>

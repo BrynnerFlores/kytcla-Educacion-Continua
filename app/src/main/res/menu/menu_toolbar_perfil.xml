@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_toolbar_perfil_modificar"
+        android:title="Modificar Información"
+        android:icon="@drawable/round_mode_edit_white_24dp"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_toolbar_perfil_modificar_password"
+        android:title="Modificar Contraseña"
+        android:icon="@drawable/round_mode_edit_white_24dp"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_toolbar_perfil_cerrar_sesion"
+        android:title="Cerrar Sesión"
+        android:icon="@drawable/round_logout_white_24dp"
+        app:showAsAction="never"/>
+</menu>

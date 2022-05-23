@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/Grey400"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/app_compat_image_view_curso_logo"
+        app:layout_constraintTop_toTopOf="@+id/app_compat_image_view_curso_logo">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeable_img_view_item_nuevo_curso_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/mtrl_txtview_curso_nombre"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:strokeColor="@color/Grey500"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtrl_txtview_curso_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/mtrl_txtview_curso_area"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shapeable_img_view_item_nuevo_curso_logo" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtrl_txtview_curso_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/mtrl_txtview_curso_objetivo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtrl_txtview_curso_nombre" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtrl_txtview_curso_objetivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtrl_txtview_curso_area" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

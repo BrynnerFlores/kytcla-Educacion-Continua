@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Producto;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -23,16 +24,16 @@ public class AdapterTiendaProductosCategoriaGeneral  extends RecyclerView.Adapte
     // region Variables
 
     private Context context;
-    private ArrayList<Producto> productos;
+    private ArrayList<ProductoPersonalizado> productosPersonalizados;
     private View.OnClickListener listener;
 
     // endregion
 
     // region Constructor
 
-    public AdapterTiendaProductosCategoriaGeneral(Context context, ArrayList<Producto> productos) {
+    public AdapterTiendaProductosCategoriaGeneral(Context context, ArrayList<ProductoPersonalizado> productosPersonalizados) {
         this.context = context;
-        this.productos = productos;
+        this.productosPersonalizados = productosPersonalizados;
     }
 
     // endregion
@@ -56,26 +57,26 @@ public class AdapterTiendaProductosCategoriaGeneral  extends RecyclerView.Adapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Producto producto = productos.get(position);
+        final Producto producto = productosPersonalizados.get(position).getProducto();
         final byte[] bytes = Base64.getDecoder().decode(producto.getFotoProducto());
         final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         holder.shapeableImageViewFoto.setImageBitmap(bitmap);
         holder.materialTextViewNombre.setText(producto.getNombre());
         holder.materialTextViewCategoria.setText(producto.getCategoriaProducto());
-        holder.materialTextViewPrecio.setText(producto.getPrecio());
+        holder.materialTextViewPrecio.setText(producto.getPrecio() + " Bs");
     }
 
     @Override
     public int getItemCount() {
-        return productos.size();
+        return productosPersonalizados.size();
     }
 
     public void setOnClickListener(final View.OnClickListener listener) {
         this.listener = listener;
     }
 
-    public Producto getProducto(final int index) {
-        return productos.get(index);
+    public ProductoPersonalizado getProducto(final int index) {
+        return productosPersonalizados.get(index);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,7 +1,6 @@
 package com.brynnerflores.kytcla.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -16,7 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Curso;
-import com.brynnerflores.kytcla.model.POJO.CursoGuardado;
+import com.brynnerflores.kytcla.model.POJO.CursoPersonalizado;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +36,7 @@ public class ModelCurso {
     private CallBackModelGuardarCurso callBackModelGuardarCurso;
     private CallBackModelListarCursosGuardados callBackModelListarCursosGuardados;
     private CallBackModelEliminarCurso callBackModelEliminarCurso;
+    private CallBackModelEliminarCursoGuardado callBackModelEliminarCursoGuardado;
 
     // endregion
 
@@ -74,6 +74,10 @@ public class ModelCurso {
         this.callBackModelEliminarCurso = callBackModelEliminarCurso;
     }
 
+    public void setCallBackModelEliminarCursoGuardado(CallBackModelEliminarCursoGuardado callBackModelEliminarCursoGuardado) {
+        this.callBackModelEliminarCursoGuardado = callBackModelEliminarCursoGuardado;
+    }
+
     // endregion
 
     // region Metodos
@@ -86,10 +90,10 @@ public class ModelCurso {
             requestQueue = new RequestQueue(cache, network);
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cursos/listar_cursos.php";
+            final String url = "https://www.kytcla.com/app/cursos/listar_cursos.php";
             final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, new JSONArray(),
                     response -> {
-                        ArrayList<Curso> cursos = new ArrayList<>();
+                        ArrayList<CursoPersonalizado> cursosPersonalizados = new ArrayList<>();
                         if (response.length() > 0) {
                             for (int i = 0; i < response.length(); i++) {
                                 try {
@@ -109,15 +113,18 @@ public class ModelCurso {
                                     final String costo_curso = jsonObject.getString("costo_curso");
                                     final String enlace_inscripcion = jsonObject.getString("enlace_inscripcion");
                                     final boolean estado = jsonObject.getString("estado").equals("1");
+                                    final boolean curso_guardado = jsonObject.getString("curso_guardado").equals("1");
+
                                     final Curso curso = new Curso(codigo_curso_publicado, logo, area, nombre, objetivo, dirigido, dictado, contenidos, fecha_inicio, horario, duracion, modalidad, costo_curso, enlace_inscripcion, estado);
-                                    cursos.add(curso);
+                                    final CursoPersonalizado cursoPersonalizado = new CursoPersonalizado(curso, curso_guardado);
+                                    cursosPersonalizados.add(cursoPersonalizado);
                                 } catch (JSONException exception) {
                                     exception.printStackTrace();
-                                    cursos = null;
+                                    cursosPersonalizados = null;
                                 }
                             }
                         }
-                        callBackModelListarCursos.cursosObtenidos(cursos);
+                        callBackModelListarCursos.cursosObtenidos(cursosPersonalizados);
                     },
                     error -> {
                         callBackModelListarCursos.cursosObtenidos(null);
@@ -135,7 +142,7 @@ public class ModelCurso {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/cursos/crear_curso.php";
+        final String url = "https://www.kytcla.com/app/cursos/crear_curso.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
@@ -196,16 +203,14 @@ public class ModelCurso {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/cursos/actualizar_curso.php";
+        final String url = "https://www.kytcla.com/app/cursos/actualizar_curso.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-            Log.d("RESPONSE", response);
                     try {
                         final JSONArray jsonArray = new JSONArray(response);
                         callBackModelActualizarCurso.responseActualizarCurso(jsonArray.getJSONObject(0).getString("RESPONSE"));
                     } catch (final Exception exception) {
                         exception.printStackTrace();
-                        Log.d("ERROR", exception.getMessage());
                         callBackModelActualizarCurso.responseActualizarCurso("ERROR_DESCONOCIDO");
                     }
                 },
@@ -245,7 +250,7 @@ public class ModelCurso {
             requestQueue = new RequestQueue(cache, network);
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cursos/guardar_curso.php";
+            final String url = "https://www.kytcla.com/app/cursos/guardar_curso.php";
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
                         try {
@@ -281,12 +286,12 @@ public class ModelCurso {
             requestQueue = new RequestQueue(cache, network);
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cursos/listar_cursos_guardados.php";
+            final String url = "https://www.kytcla.com/app/cursos/listar_cursos_guardados.php";
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
                         try {
                             final JSONArray jsonArray = new JSONArray(response);
-                            ArrayList<CursoGuardado> cursosGuardados = new ArrayList<>();
+                            ArrayList<CursoPersonalizado> cursosPersonalizados = new ArrayList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 final JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -309,13 +314,11 @@ public class ModelCurso {
                                 final String enlace_inscripcion = jsonObject.getString("enlace_inscripcion");
                                 final boolean estado_curso_publicado = jsonObject.getString("estado_curso_publicado").equals("1");
                                 final Curso curso = new Curso(codigo_curso_publicado, logo, area, nombre, objetivo, dirigido, dictado, contenidos, fecha_inicio, horario, duracion, modalidad, costo_curso, enlace_inscripcion, estado_curso_publicado);
-                                final CursoGuardado cursoGuardado = new CursoGuardado(codigo_curso_guardado, cuenta, curso, fecha_guardado, estado_curso_guardado);
-                                cursosGuardados.add(cursoGuardado);
+                                cursosPersonalizados.add(new CursoPersonalizado(curso, true));
                             }
-                            callBackModelListarCursosGuardados.cursosGuardadosObtenidos(cursosGuardados);
+                            callBackModelListarCursosGuardados.cursosGuardadosObtenidos(cursosPersonalizados);
                         } catch (JSONException exception) {
                             exception.printStackTrace();
-                            Log.d("ERROR", exception.getMessage());
                             callBackModelListarCursosGuardados.cursosGuardadosObtenidos(null);
                         }
                     },
@@ -343,16 +346,14 @@ public class ModelCurso {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/cursos/eliminar_curso.php";
+        final String url = "https://www.kytcla.com/app/cursos/eliminar_curso.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    Log.d("RESPONSE", response);
                     try {
                         final JSONArray jsonArray = new JSONArray(response);
                         callBackModelEliminarCurso.responseEliminarCurso(jsonArray.getJSONObject(0).getString("RESPONSE"));
                     } catch (final Exception exception) {
                         exception.printStackTrace();
-                        Log.d("ERROR", exception.getMessage());
                         callBackModelEliminarCurso.responseEliminarCurso("ERROR_DESCONOCIDO");
                     }
                 },
@@ -370,12 +371,45 @@ public class ModelCurso {
         requestQueue.add(stringRequest);
     }
 
+    public void eliminarCursoGuardado(final Cuenta cuenta, final Curso curso) {
+        RequestQueue requestQueue;
+        Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024);
+        Network network = new BasicNetwork(new HurlStack());
+        requestQueue = new RequestQueue(cache, network);
+        requestQueue.start();
+
+        final String url = "https://www.kytcla.com/app/cursos/eliminar_curso_guardado.php";
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        final JSONArray jsonArray = new JSONArray(response);
+                        callBackModelEliminarCursoGuardado.responseEliminarCursoGuardado(jsonArray.getJSONObject(0).getString("RESPONSE"));
+                    } catch (final Exception exception) {
+                        exception.printStackTrace();
+                        callBackModelEliminarCursoGuardado.responseEliminarCursoGuardado("ERROR_DESCONOCIDO");
+                    }
+                },
+                error -> {
+                    callBackModelEliminarCursoGuardado.responseEliminarCursoGuardado("ERROR");
+                }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() {
+                final Map<String, String> params = new HashMap<>();
+                params.put("codigo_cuenta", String.valueOf(cuenta.getCodigoCuenta()));
+                params.put("codigo_curso_publicado", String.valueOf(curso.getCodigoCursoPublicado()));
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
     // endregion
 
     // region Interface
 
     public interface CallBackModelListarCursos {
-        void cursosObtenidos(final ArrayList<Curso> cursos);
+        void cursosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados);
     }
 
     public interface CallBackModelInsertarCurso {
@@ -391,11 +425,15 @@ public class ModelCurso {
     }
 
     public interface CallBackModelListarCursosGuardados {
-        void cursosGuardadosObtenidos(final ArrayList<CursoGuardado> cursosGuardados);
+        void cursosGuardadosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados);
     }
 
     public interface CallBackModelEliminarCurso {
         void responseEliminarCurso(final String code_response);
+    }
+
+    public interface CallBackModelEliminarCursoGuardado {
+        void responseEliminarCursoGuardado(final String code_response);
     }
 
     // endregion

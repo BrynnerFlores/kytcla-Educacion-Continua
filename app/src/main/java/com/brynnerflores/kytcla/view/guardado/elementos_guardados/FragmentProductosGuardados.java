@@ -21,6 +21,7 @@ import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Producto;
 import com.brynnerflores.kytcla.model.POJO.ProductoGuardado;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 import com.brynnerflores.kytcla.presenter.productos.PresenterProducto;
 import com.brynnerflores.kytcla.view.tienda.productos.ActivityProducto;
 import com.google.android.material.button.MaterialButton;
@@ -208,8 +209,8 @@ public class FragmentProductosGuardados extends Fragment implements View.OnClick
         showLista();
 
         adapterProductoGuardado.setOnClickListener(view -> {
-            final Producto producto = adapterProductoGuardado.getProducto(recyclerViewProductosGuardados.getChildViewHolder(view).getLayoutPosition());
-            startActivity(new Intent(getActivity(), ActivityProducto.class).putExtra("PRODUCTO", producto));
+            final ProductoPersonalizado productoPersonalizado = adapterProductoGuardado.getProducto(recyclerViewProductosGuardados.getChildViewHolder(view).getLayoutPosition());
+            startActivity(new Intent(getActivity(), ActivityProducto.class).putExtra("PRODUCTO_PERSONALIZADO", productoPersonalizado));
         });
     }
 

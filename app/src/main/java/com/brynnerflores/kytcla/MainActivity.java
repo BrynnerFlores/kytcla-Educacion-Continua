@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("kytcla", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences("kytcla", Context.MODE_PRIVATE);
         final int codigo_persona = sharedPreferences.getInt("codigo_persona", 0);
         final String nombre = sharedPreferences.getString("nombre", null);
         final String apellido = sharedPreferences.getString("apellido", null);
@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
             bottomNavigationView = findViewById(R.id.bottom_navigation_view);
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
             navController.addOnDestinationChangedListener(this);
-
-            bottomNavigationView.getOrCreateBadge(R.id.nav_fragment_tienda).setNumber(10);
         }
     }
 

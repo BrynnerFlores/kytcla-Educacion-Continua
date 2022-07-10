@@ -1,6 +1,7 @@
 package com.brynnerflores.kytcla.view.curso;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -66,6 +67,9 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
     private PresenterCurso presenterCurso;
 
     private String logoBase64;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
     // endregion
 
@@ -177,6 +181,7 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .cameraOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -184,6 +189,7 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .galleryOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -208,7 +214,13 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
                 break;
 
             case R.id.material_button_modificar_curso_guardar:
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                materialAlertDialogBuilder.setCancelable(false);
+                materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                alertDialog = materialAlertDialogBuilder.show();
+
                 modificar();
+
                 break;
 
             default:break;
@@ -333,6 +345,7 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
 
     @Override
     public void cursoModificado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -340,16 +353,19 @@ public class ActivityModificarCurso extends AppCompatActivity implements View.On
 
     @Override
     public void cursoExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorModificarCurso(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoModificarCurso(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

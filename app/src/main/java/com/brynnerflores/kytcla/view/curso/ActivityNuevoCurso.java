@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.brynnerflores.kytcla.R;
@@ -65,6 +65,9 @@ public class ActivityNuevoCurso extends AppCompatActivity implements View.OnClic
     private PresenterCurso presenterCurso;
 
     private String logoBase64;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
     // endregion
 
@@ -144,6 +147,7 @@ public class ActivityNuevoCurso extends AppCompatActivity implements View.OnClic
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .cameraOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -151,6 +155,7 @@ public class ActivityNuevoCurso extends AppCompatActivity implements View.OnClic
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .galleryOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -175,7 +180,13 @@ public class ActivityNuevoCurso extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.mtrl_button_nuevo_curso_crear_curso:
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                materialAlertDialogBuilder.setCancelable(false);
+                materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                alertDialog = materialAlertDialogBuilder.show();
+
                 crearCurso();
+
                 break;
 
             default:break;
@@ -307,22 +318,26 @@ public class ActivityNuevoCurso extends AppCompatActivity implements View.OnClic
 
     @Override
     public void cursoCreado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         finish();
     }
 
     @Override
     public void cursoExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorCrearCurso(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoCrearCurso(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

@@ -1,4 +1,4 @@
-package com.brynnerflores.kytcla;
+package com.brynnerflores.kytcla.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.brynnerflores.kytcla.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ActivityWebView extends AppCompatActivity {

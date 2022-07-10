@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 import com.brynnerflores.kytcla.model.POJO.Curso;
+import com.brynnerflores.kytcla.model.POJO.CursoPersonalizado;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -24,16 +25,16 @@ public class AdapterCurso extends RecyclerView.Adapter<AdapterCurso.ViewHolder> 
     // region Variables
 
     private final Context context;
-    private ArrayList<Curso> cursos;
+    private ArrayList<CursoPersonalizado> cursosPersonalizados;
     private View.OnClickListener listener;
 
     // endregion
 
     // region Constructor
 
-    public AdapterCurso(Context context, ArrayList<Curso> cursos) {
+    public AdapterCurso(Context context, ArrayList<CursoPersonalizado> cursosPersonalizados) {
         this.context = context;
-        this.cursos = cursos;
+        this.cursosPersonalizados = cursosPersonalizados;
     }
 
     // endregion
@@ -50,7 +51,7 @@ public class AdapterCurso extends RecyclerView.Adapter<AdapterCurso.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Curso curso = cursos.get(position);
+        final Curso curso = cursosPersonalizados.get(position).getCurso();
         final byte[] bytes = Base64.getDecoder().decode(curso.getLogoCurso());
         final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         holder.shapeableImageViewLogo.setImageBitmap(bitmap);
@@ -61,15 +62,15 @@ public class AdapterCurso extends RecyclerView.Adapter<AdapterCurso.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return cursos.size();
+        return cursosPersonalizados.size();
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
-    public Curso getCurso(final int index) {
-        return cursos.get(index);
+    public CursoPersonalizado getCursoPersonalizado(final int index) {
+        return cursosPersonalizados.get(index);
     }
 
     @Override

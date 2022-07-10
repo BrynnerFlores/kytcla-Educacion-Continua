@@ -1,10 +1,13 @@
-package com.brynnerflores.kytcla.view;
+package com.brynnerflores.kytcla.view.perfil;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.brynnerflores.kytcla.R;
+import com.brynnerflores.kytcla.SplashActivity;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.presenter.cuenta.PresenterCuenta;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -62,6 +66,9 @@ public class ActivityModificarPerfil extends AppCompatActivity implements View.O
     private MaterialButton materialButtonGuardar;
 
     private String fotoBase64;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
     
     // endregion
     
@@ -166,6 +173,7 @@ public class ActivityModificarPerfil extends AppCompatActivity implements View.O
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .cameraOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -173,13 +181,14 @@ public class ActivityModificarPerfil extends AppCompatActivity implements View.O
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .galleryOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
                                 case 2:
                                     final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blank_profile);
                                     final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
                                     final byte[] imageByte = byteArrayOutputStream.toByteArray();
                                     fotoBase64 = Base64.getEncoder().encodeToString(imageByte);
                                     shapeableImageViewFotoPerfil.setImageDrawable(getDrawable(R.drawable.blank_profile));
@@ -203,7 +212,13 @@ public class ActivityModificarPerfil extends AppCompatActivity implements View.O
                 break;
 
             case R.id.material_button_modificar_perfil_guardar:
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                materialAlertDialogBuilder.setCancelable(false);
+                materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                alertDialog = materialAlertDialogBuilder.show();
+
                 modificarCuenta();
+
                 break;
 
             default:break;
@@ -285,21 +300,34 @@ public class ActivityModificarPerfil extends AppCompatActivity implements View.O
 
     @Override
     public void cuentaModificada(final String msg) {
+        alertDialog.dismiss();
+        new MaterialAlertDialogBuilder(this).
+                setCancelable(false).
+                setTitle("Kytcla - Educación Contínua").
+                setMessage("Tu información fue modificada.\n\nDebes volver a iniciar sesión para actualizar los cambios.").
+                setPositiveButton("Aceptar", (dialogInterface, i) -> {
+                    getSharedPreferences("kytcla", Context.MODE_PRIVATE).edit().clear().commit();
+                    finish();
+                    startActivity(new Intent(this, SplashActivity.class));
+                }).show();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void correoElectronicoExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorModificarCuenta(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoModificarCuenta(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

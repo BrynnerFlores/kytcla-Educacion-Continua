@@ -53,11 +53,11 @@ public class PresenterCuenta implements ModelCuenta.CallBackModelActualizar, Mod
         }
     }
 
-    public void modificarPassword(final Cuenta cuenta, final String newPassword) {
+    public void modificarPassword(final Cuenta cuenta, final String password, final String newPassword) {
         try {
             modelCuenta = new ModelCuenta(context);
             modelCuenta.setCallBackModelActualizarPassword(this);
-            modelCuenta.actualizarPassword(cuenta, newPassword);
+            modelCuenta.actualizarPassword(cuenta, password, newPassword);
         } catch (final Exception exception) {
             callBackModificarPassword.errorDesconocidoModificarPassword("Se produjo un error desconocido, vuelve a intentarlo.");
         }
@@ -86,6 +86,7 @@ public class PresenterCuenta implements ModelCuenta.CallBackModelActualizar, Mod
 
     public interface CallBackModificarPassword {
         void passwordModificado(final String msg);
+        void passwordIncorrecto(final String msg);
         void errorModificarPassword(final String msg);
         void errorDesconocidoModificarPassword(final String msg);
     }
@@ -122,9 +123,14 @@ public class PresenterCuenta implements ModelCuenta.CallBackModelActualizar, Mod
         }
     }
 
+
     @Override
     public void responseActualizarPassword(final String code_response) {
         switch (code_response) {
+            case "PASSWORD_INCORRECTO":
+                callBackModificarPassword.passwordIncorrecto("Contraseña Incorrecta.");
+                break;
+
             case "ACTUALIZADO":
                 callBackModificarPassword.passwordModificado("Contraseña Modificada.");
                 break;

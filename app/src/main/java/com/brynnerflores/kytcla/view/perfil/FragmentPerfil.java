@@ -1,4 +1,4 @@
-package com.brynnerflores.kytcla.view;
+package com.brynnerflores.kytcla.view.perfil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.SplashActivity;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Persona;
+import com.brynnerflores.kytcla.view.cuenta.ActivityModificarPassword;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -109,6 +111,10 @@ public class FragmentPerfil extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_toolbar_perfil_modificar:
                 startActivity(new Intent(getActivity(), ActivityModificarPerfil.class).putExtra("CUENTA", cuenta));
+                return true;
+
+            case R.id.menu_toolbar_perfil_modificar_password:
+                startActivity(new Intent(getActivity(), ActivityModificarPassword.class).putExtra("CUENTA", cuenta));
                 return true;
 
             case R.id.menu_toolbar_perfil_cerrar_sesion:

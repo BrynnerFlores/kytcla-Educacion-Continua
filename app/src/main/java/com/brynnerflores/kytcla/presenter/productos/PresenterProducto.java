@@ -6,10 +6,11 @@ import com.brynnerflores.kytcla.model.ModelProducto;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Producto;
 import com.brynnerflores.kytcla.model.POJO.ProductoGuardado;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 
 import java.util.ArrayList;
 
-public class PresenterProducto implements ModelProducto.CallBackModelListarProductos, ModelProducto.CallBackModelInsertarProducto, ModelProducto.CallBackModelModificarProducto, ModelProducto.CallBackModelListarProductosGuardados, ModelProducto.CallBackModelEliminarProducto, ModelProducto.CallBackModelGuardarProducto {
+public class PresenterProducto implements ModelProducto.CallBackModelListarProductos, ModelProducto.CallBackModelInsertarProducto, ModelProducto.CallBackModelModificarProducto, ModelProducto.CallBackModelListarProductosGuardados, ModelProducto.CallBackModelEliminarProducto, ModelProducto.CallBackModelGuardarProducto, ModelProducto.CallBackModelEliminarProductoGuardado {
 
     // region Variables
 
@@ -20,6 +21,7 @@ public class PresenterProducto implements ModelProducto.CallBackModelListarProdu
     private CallBackObtenerProductosGuardados callBackObtenerProductosGuardados;
     private CallBackEliminarProducto callBackEliminarProducto;
     private CallBackGuardarProducto callBackGuardarProducto;
+    private CallBackEliminarProductoGuardado callBackEliminarProductoGuardado;
 
     // endregion
 
@@ -55,6 +57,10 @@ public class PresenterProducto implements ModelProducto.CallBackModelListarProdu
 
     public void setCallBackGuardarProducto(CallBackGuardarProducto callBackGuardarProducto) {
         this.callBackGuardarProducto = callBackGuardarProducto;
+    }
+
+    public void setCallBackEliminarProductoGuardado(CallBackEliminarProductoGuardado callBackEliminarProductoGuardado) {
+        this.callBackEliminarProductoGuardado = callBackEliminarProductoGuardado;
     }
 
     // endregion
@@ -121,18 +127,28 @@ public class PresenterProducto implements ModelProducto.CallBackModelListarProdu
         }
     }
 
+    public void eliminarProductoGuardado(final Cuenta cuenta, final Producto producto) {
+        try {
+            final ModelProducto modelProducto = new ModelProducto(context);
+            modelProducto.setCallBackModelEliminarProductoGuardado(this);
+            modelProducto.eliminarProductoGuardado(cuenta, producto);
+        } catch (final Exception exception) {
+            callBackEliminarProductoGuardado.errorDesconocidoEliminarProductoGuardado("Se produjo un error desconocido, vuelve a intentarlo.");
+        }
+    }
+
     // endregion
 
     // region CallBack Model
 
     @Override
-    public void responseListarProductos(final ArrayList<Producto> productos) {
-        if (productos == null) {
+    public void responseListarProductos(final ArrayList<ProductoPersonalizado> productosPersonalizados) {
+        if (productosPersonalizados == null) {
             callBackObtenerProductos.errorObtenerProductos("Se produjo un error al obtener los productos.");
-        } else if (productos.isEmpty()) {
+        } else if (productosPersonalizados.isEmpty()) {
             callBackObtenerProductos.listaProductosVacia("No se encontraron productos registrados.");
         } else {
-            callBackObtenerProductos.productosObtenidos(productos);
+            callBackObtenerProductos.productosObtenidos(productosPersonalizados);
         }
     }
 
@@ -223,12 +239,29 @@ public class PresenterProducto implements ModelProducto.CallBackModelListarProdu
         }
     }
 
+    @Override
+    public void responseEliminarProductoGuardado(final String code_response) {
+        switch (code_response) {
+            case "ACTUALIZADO":
+                callBackEliminarProductoGuardado.productoGuardadoEliminado("Eliminado de elementos guardado.");
+                break;
+
+            case "NO_ACTUALIZADO":
+                callBackEliminarProductoGuardado.errorEliminarProductoGuardado("Se produjo un error al eliminar el producto guardado.");
+                break;
+
+            default:
+                callBackEliminarProductoGuardado.errorDesconocidoEliminarProductoGuardado("Se produjo un error desconocido, vuelve a intentarlo.");
+                break;
+        }
+    }
+
     // endregion
 
     // region Interface
 
     public interface CallBackObtenerProductos {
-        void productosObtenidos(final ArrayList<Producto> productos);
+        void productosObtenidos(final ArrayList<ProductoPersonalizado> productosPersonalizados);
 
         void listaProductosVacia(final String msg);
 
@@ -281,6 +314,14 @@ public class PresenterProducto implements ModelProducto.CallBackModelListarProdu
         void errorGuardarProducto(final String msg);
 
         void errorDesconocidoGuardarProducto(final String msg);
+    }
+
+    public interface CallBackEliminarProductoGuardado {
+        void productoGuardadoEliminado(final String msg);
+
+        void errorEliminarProductoGuardado(final String msg);
+
+        void errorDesconocidoEliminarProductoGuardado(final String msg);
     }
 
     // endregion

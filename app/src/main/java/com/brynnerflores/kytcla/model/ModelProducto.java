@@ -14,8 +14,10 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
+import com.brynnerflores.kytcla.model.POJO.Curso;
 import com.brynnerflores.kytcla.model.POJO.Producto;
 import com.brynnerflores.kytcla.model.POJO.ProductoGuardado;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +38,7 @@ public class ModelProducto {
     private CallBackModelListarProductosGuardados callBackModelListarProductosGuardados;
     private CallBackModelEliminarProducto callBackModelEliminarProducto;
     private CallBackModelGuardarProducto callBackModelGuardarProducto;
+    private CallBackModelEliminarProductoGuardado callBackModelEliminarProductoGuardado;
 
     // endregion
 
@@ -73,6 +76,10 @@ public class ModelProducto {
         this.callBackModelGuardarProducto = callBackModelGuardarProducto;
     }
 
+    public void setCallBackModelEliminarProductoGuardado(CallBackModelEliminarProductoGuardado callBackModelEliminarProductoGuardado) {
+        this.callBackModelEliminarProductoGuardado = callBackModelEliminarProductoGuardado;
+    }
+
     // endregion
 
     // region Metodos
@@ -85,12 +92,12 @@ public class ModelProducto {
             requestQueue = new RequestQueue(cache, network);
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/productos/listar_productos.php";
+            final String url = "https://www.kytcla.com/app/productos/listar_productos.php";
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
                         try {
                             final JSONArray jsonArray = new JSONArray(response);
-                            ArrayList<Producto> productos = new ArrayList<>();
+                            ArrayList<ProductoPersonalizado> productosPersonalizados = new ArrayList<>();
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     try {
@@ -102,15 +109,16 @@ public class ModelProducto {
                                         final String descripcion = jsonObject.getString("descripcion");
                                         final String precio = jsonObject.getString("precio");
                                         final boolean estado = jsonObject.getString("estado").equals("1");
+                                        final boolean producto_guardado = jsonObject.getString("producto_guardado").equals("1");
                                         final Producto producto = new Producto(codigo_producto, categoria_producto, logo, nombre, descripcion, precio, estado);
-                                        productos.add(producto);
-                                    } catch (JSONException exception) {
+                                        productosPersonalizados.add(new ProductoPersonalizado(producto, producto_guardado));
+                                    } catch (final JSONException exception) {
                                         exception.printStackTrace();
-                                        productos = null;
+                                        productosPersonalizados = null;
                                     }
                                 }
                             }
-                            callBackModelListarProductos.responseListarProductos(productos);
+                            callBackModelListarProductos.responseListarProductos(productosPersonalizados);
                         } catch (final JSONException exception) {
                             callBackModelListarProductos.responseListarProductos(null);
                         }
@@ -139,7 +147,7 @@ public class ModelProducto {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/productos/insertar_producto.php";
+        final String url = "https://www.kytcla.com/app/productos/insertar_producto.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
@@ -176,7 +184,7 @@ public class ModelProducto {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/productos/actualizar_producto.php";
+        final String url = "https://www.kytcla.com/app/productos/actualizar_producto.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
@@ -214,7 +222,7 @@ public class ModelProducto {
             requestQueue = new RequestQueue(cache, network);
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/productos/listar_productos_guardados.php";
+            final String url = "https://www.kytcla.com/app/productos/listar_productos_guardados.php";
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
                         try {
@@ -270,7 +278,7 @@ public class ModelProducto {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/productos/eliminar_producto.php";
+        final String url = "https://www.kytcla.com/app/productos/eliminar_producto.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     Log.d("RESPONSE", response);
@@ -304,7 +312,7 @@ public class ModelProducto {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-        final String url = "http://192.168.0.104/kytcla/productos/guardar_producto.php";
+        final String url = "https://www.kytcla.com/app/productos/guardar_producto.php";
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
@@ -330,12 +338,45 @@ public class ModelProducto {
         requestQueue.add(stringRequest);
     }
 
+    public void eliminarProductoGuardado(final Cuenta cuenta, final Producto producto) {
+        RequestQueue requestQueue;
+        Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024);
+        Network network = new BasicNetwork(new HurlStack());
+        requestQueue = new RequestQueue(cache, network);
+        requestQueue.start();
+
+        final String url = "https://www.kytcla.com/app/productos/eliminar_producto_guardado.php";
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        final JSONArray jsonArray = new JSONArray(response);
+                        callBackModelEliminarProductoGuardado.responseEliminarProductoGuardado(jsonArray.getJSONObject(0).getString("RESPONSE"));
+                    } catch (final Exception exception) {
+                        exception.printStackTrace();
+                        callBackModelEliminarProductoGuardado.responseEliminarProductoGuardado("ERROR_DESCONOCIDO");
+                    }
+                },
+                error -> {
+                    callBackModelEliminarProductoGuardado.responseEliminarProductoGuardado("ERROR");
+                }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() {
+                final Map<String, String> params = new HashMap<>();
+                params.put("codigo_cuenta", String.valueOf(cuenta.getCodigoCuenta()));
+                params.put("codigo_producto", String.valueOf(producto.getCodigoProducto()));
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
     // endregion
 
     // region Interface
 
     public interface CallBackModelListarProductos {
-        void responseListarProductos(final ArrayList<Producto> productos);
+        void responseListarProductos(final ArrayList<ProductoPersonalizado> productosPersonalizados);
     }
 
     public interface CallBackModelInsertarProducto {
@@ -356,6 +397,10 @@ public class ModelProducto {
 
     public interface CallBackModelGuardarProducto {
         void responseGuardarProducto(final String code_response);
+    }
+
+    public interface CallBackModelEliminarProductoGuardado {
+        void responseEliminarProductoGuardado(final String code_response);
     }
 
     // endregion

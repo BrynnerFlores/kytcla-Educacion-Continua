@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Producto;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 import com.brynnerflores.kytcla.presenter.productos.PresenterProducto;
 import com.brynnerflores.kytcla.view.tienda.categorias.general.recycler.AdapterTiendaProductosCategoriaGeneral;
 import com.brynnerflores.kytcla.view.tienda.productos.ActivityProducto;
@@ -125,7 +126,7 @@ public class FragmentCategoriaGeneral extends Fragment implements View.OnClickLi
     // region CallBackPresenter
 
     @Override
-    public void productosObtenidos(final ArrayList<Producto> productos) {
+    public void productosObtenidos(final ArrayList<ProductoPersonalizado> productosPersonalizados) {
         try {
             constraintLayoutListaVacia.setEnabled(false);
             constraintLayoutListaVacia.setVisibility(View.GONE);
@@ -134,7 +135,7 @@ public class FragmentCategoriaGeneral extends Fragment implements View.OnClickLi
             swipeRefreshLayoutProductos.setEnabled(true);
             swipeRefreshLayoutProductos.setVisibility(View.VISIBLE);
 
-            adapterTiendaProductosCategoriaGeneral = new AdapterTiendaProductosCategoriaGeneral(getContext(), productos);
+            adapterTiendaProductosCategoriaGeneral = new AdapterTiendaProductosCategoriaGeneral(getContext(), productosPersonalizados);
 
             recyclerViewProductos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
             recyclerViewProductos.setAdapter(adapterTiendaProductosCategoriaGeneral);
@@ -142,8 +143,8 @@ public class FragmentCategoriaGeneral extends Fragment implements View.OnClickLi
             swipeRefreshLayoutProductos.setRefreshing(false);
 
             adapterTiendaProductosCategoriaGeneral.setOnClickListener(v -> {
-                final Producto producto = adapterTiendaProductosCategoriaGeneral.getProducto(recyclerViewProductos.getChildViewHolder(v).getLayoutPosition());
-                startActivity(new Intent(getActivity(), ActivityProducto.class).putExtra("PRODUCTO", producto));
+                final ProductoPersonalizado productoPersonalizado = adapterTiendaProductosCategoriaGeneral.getProducto(recyclerViewProductos.getChildViewHolder(v).getLayoutPosition());
+                startActivity(new Intent(getActivity(), ActivityProducto.class).putExtra("PRODUCTO_PERSONALIZADO", productoPersonalizado));
             });
         } catch (final Exception exception) {
             Toast.makeText(getContext(), "Se produjo un error desconocido, vuelve a intentarlo.", Toast.LENGTH_SHORT).show();

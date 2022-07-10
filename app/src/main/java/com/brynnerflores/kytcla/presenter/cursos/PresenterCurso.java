@@ -6,10 +6,11 @@ import com.brynnerflores.kytcla.model.ModelCurso;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Curso;
 import com.brynnerflores.kytcla.model.POJO.CursoGuardado;
+import com.brynnerflores.kytcla.model.POJO.CursoPersonalizado;
 
 import java.util.ArrayList;
 
-public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, ModelCurso.CallBackModelInsertarCurso, ModelCurso.CallBackModelActualizarCurso, ModelCurso.CallBackModelGuardarCurso, ModelCurso.CallBackModelListarCursosGuardados, ModelCurso.CallBackModelEliminarCurso {
+public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, ModelCurso.CallBackModelInsertarCurso, ModelCurso.CallBackModelActualizarCurso, ModelCurso.CallBackModelGuardarCurso, ModelCurso.CallBackModelListarCursosGuardados, ModelCurso.CallBackModelEliminarCurso, ModelCurso.CallBackModelEliminarCursoGuardado {
 
     // region Variables
 
@@ -21,6 +22,7 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
     private CallBackGuardarCurso callBackGuardarCurso;
     private CallBackObtenerCursosGuardados callBackObtenerCursosGuardados;
     private CallBackEliminarCurso callBackEliminarCurso;
+    private CallBackEliminarCursoGuardado callBackEliminarCursoGuardado;
 
     // endregion
 
@@ -57,7 +59,11 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
     public void setCallBackEliminarCurso(CallBackEliminarCurso callBackEliminarCurso) {
         this.callBackEliminarCurso = callBackEliminarCurso;
     }
-    
+
+    public void setCallBackEliminarCursoGuardado(CallBackEliminarCursoGuardado callBackEliminarCursoGuardado) {
+        this.callBackEliminarCursoGuardado = callBackEliminarCursoGuardado;
+    }
+
     // endregion
 
     // region Metodos
@@ -122,18 +128,28 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
         }
     }
 
+    public void eliminarCursoGuardado(final Cuenta cuenta, final Curso curso) {
+        try {
+            modelCurso = new ModelCurso(context);
+            modelCurso.setCallBackModelEliminarCursoGuardado(this);
+            modelCurso.eliminarCursoGuardado(cuenta, curso);
+        } catch (final Exception exception) {
+            callBackEliminarCursoGuardado.errorDesconocidoEliminarCursoGuardado("Se produjo un error desconocido, vuelve a intentarlo.");
+        }
+    }
+
     // endregion
 
     // region CallBackModel
 
     @Override
-    public void cursosObtenidos(final ArrayList<Curso> cursos) {
-        if (cursos == null) {
+    public void cursosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados) {
+        if (cursosPersonalizados == null) {
             callBackObtenerCursos.errorObtenerCursos("Se produjo un error al obtener los cursos.");
-        } else if (cursos.isEmpty()) {
+        } else if (cursosPersonalizados.isEmpty()) {
             callBackObtenerCursos.listaCursosVacia("No hay cursos registrados.");
         } else {
-            callBackObtenerCursos.cursosObtenidos(cursos);
+            callBackObtenerCursos.cursosObtenidos(cursosPersonalizados);
         }
     }
 
@@ -197,13 +213,13 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
     }
 
     @Override
-    public void cursosGuardadosObtenidos(final ArrayList<CursoGuardado> cursosGuardados) {
-        if (cursosGuardados == null) {
+    public void cursosGuardadosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados) {
+        if (cursosPersonalizados == null) {
             callBackObtenerCursosGuardados.errorObtenerCursosGuardados("Se produjo un error al obtener los cursos.");
-        } else if (cursosGuardados.isEmpty()) {
+        } else if (cursosPersonalizados.isEmpty()) {
             callBackObtenerCursosGuardados.listaCursosGuardadosVacia("No hay cursos registrados.");
         } else {
-            callBackObtenerCursosGuardados.cursosGuardadosObtenidos(cursosGuardados);
+            callBackObtenerCursosGuardados.cursosGuardadosObtenidos(cursosPersonalizados);
         }
     }
 
@@ -224,13 +240,29 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
         }
     }
 
+    @Override
+    public void responseEliminarCursoGuardado(final String code_response) {
+        switch (code_response) {
+            case "ACTUALIZADO":
+                callBackEliminarCursoGuardado.cursoGuardadoEliminado("Curso eliminado de elementos guardados.");
+                break;
+
+            case "NO_ACTUALIZADO":
+                callBackEliminarCursoGuardado.errorEliminarCursoGuardado("Se produjo un error al eliminar el curso.");
+                break;
+
+            default:
+                callBackEliminarCursoGuardado.errorDesconocidoEliminarCursoGuardado("Se produjo un error desconocido, vuelve a intentarlo.");
+                break;
+        }
+    }
 
     // endregion
 
     // region Interfaces
 
     public interface CallBackObtenerCursos {
-        void cursosObtenidos(final ArrayList<Curso> cursos);
+        void cursosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados);
 
         void listaCursosVacia(final String msg);
 
@@ -268,7 +300,7 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
     }
 
     public interface CallBackObtenerCursosGuardados {
-        void cursosGuardadosObtenidos(final ArrayList<CursoGuardado> cursosGuardados);
+        void cursosGuardadosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados);
 
         void listaCursosGuardadosVacia(final String msg);
 
@@ -283,6 +315,14 @@ public class PresenterCurso implements ModelCurso.CallBackModelListarCursos, Mod
         void errorEliminarCurso(final String msg);
 
         void errorDesconocidoEliminarCurso(final String msg);
+    }
+
+    public interface CallBackEliminarCursoGuardado {
+        void cursoGuardadoEliminado(final String msg);
+
+        void errorEliminarCursoGuardado(final String msg);
+
+        void errorDesconocidoEliminarCursoGuardado(final String msg);
     }
 
     // endregion

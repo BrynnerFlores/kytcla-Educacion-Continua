@@ -1,5 +1,6 @@
 package com.brynnerflores.kytcla.view.acceso.iniciar_sesion;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.presenter.PresenterAcceso;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -31,6 +33,9 @@ public class ActivityIniciarSesion extends AppCompatActivity implements View.OnC
     private MaterialButton materialButtonOlvideMiContrasena;
 
     private PresenterAcceso presenterAcceso;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
     // endregion
 
@@ -69,6 +74,11 @@ public class ActivityIniciarSesion extends AppCompatActivity implements View.OnC
                     Toast.makeText(this, "Completa todos los campos.", Toast.LENGTH_LONG).show();
                 } else {
                     textInputLayoutPassword.setError(null);
+
+                    materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                    materialAlertDialogBuilder.setCancelable(false);
+                    materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                    alertDialog = materialAlertDialogBuilder.show();
 
                     presenterAcceso = new PresenterAcceso(this);
                     presenterAcceso.setCallBackIniciarSesion(this);
@@ -112,9 +122,12 @@ public class ActivityIniciarSesion extends AppCompatActivity implements View.OnC
 
             editor.commit();
 
+            alertDialog.dismiss();
+
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } catch (final Exception exception) {
+            alertDialog.dismiss();
             Toast.makeText(this, "Se produjo un error, vuelve a iniciar sesión", Toast.LENGTH_LONG).show();
             finish();
             startActivity(new Intent(this, ActivityIniciarSesion.class));
@@ -123,16 +136,19 @@ public class ActivityIniciarSesion extends AppCompatActivity implements View.OnC
 
     @Override
     public void credencialesInvalidos(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorIniciarSesion(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoIniciarSesion(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

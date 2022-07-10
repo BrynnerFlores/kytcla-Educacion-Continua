@@ -62,7 +62,7 @@ public class ModelAcceso {
 
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/acceso/iniciar_sesion.php";
+            final String url = "https://www.kytcla.com/app/acceso/iniciar_sesion.php";
 
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
@@ -122,7 +122,7 @@ public class ModelAcceso {
 
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/acceso/registrarse.php";
+            final String url = "https://www.kytcla.com/app/acceso/registrarse.php";
 
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {

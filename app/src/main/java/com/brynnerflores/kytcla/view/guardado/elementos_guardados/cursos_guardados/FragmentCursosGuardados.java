@@ -22,6 +22,7 @@ import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Cuenta;
 import com.brynnerflores.kytcla.model.POJO.Curso;
 import com.brynnerflores.kytcla.model.POJO.CursoGuardado;
+import com.brynnerflores.kytcla.model.POJO.CursoPersonalizado;
 import com.brynnerflores.kytcla.presenter.cursos.PresenterCurso;
 import com.brynnerflores.kytcla.view.curso.ActivityCurso;
 import com.brynnerflores.kytcla.view.guardado.elementos_guardados.cursos_guardados.recyclerview.AdapterCursoGuardado;
@@ -185,7 +186,7 @@ public class FragmentCursosGuardados extends Fragment implements View.OnClickLis
     // region CallBack
 
     @Override
-    public void cursosGuardadosObtenidos(final ArrayList<CursoGuardado> cursosGuardados) {
+    public void cursosGuardadosObtenidos(final ArrayList<CursoPersonalizado> cursosPersonalizados) {
         constraintLayoutListaVacia.setEnabled(false);
         constraintLayoutListaVacia.setVisibility(View.GONE);
         constraintLayoutProgressBar.setEnabled(false);
@@ -193,14 +194,14 @@ public class FragmentCursosGuardados extends Fragment implements View.OnClickLis
         swipeRefreshLayoutCursosGuardados.setEnabled(true);
         swipeRefreshLayoutCursosGuardados.setVisibility(View.VISIBLE);
 
-        adapterCursoGuardado = new AdapterCursoGuardado(cursosGuardados);
+        adapterCursoGuardado = new AdapterCursoGuardado(cursosPersonalizados);
         recyclerViewCursosGuardados.setAdapter(adapterCursoGuardado);
 
         swipeRefreshLayoutCursosGuardados.setRefreshing(false);
 
         adapterCursoGuardado.setOnClickListener(view -> {
-            final Curso curso = adapterCursoGuardado.getCurso(recyclerViewCursosGuardados.getChildViewHolder(view).getLayoutPosition());
-            startActivity(new Intent(getActivity(), ActivityCurso.class).putExtra("CURSO", curso));
+            final CursoPersonalizado cursoPersonalizado = adapterCursoGuardado.getCurso(recyclerViewCursosGuardados.getChildViewHolder(view).getLayoutPosition());
+            startActivity(new Intent(getActivity(), ActivityCurso.class).putExtra("CURSO_PERSONALIZADO", cursoPersonalizado));
         });
     }
 

@@ -1,6 +1,7 @@
 package com.brynnerflores.kytcla.view.tienda.productos;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -52,6 +53,9 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
     private PresenterProducto presenterProducto;
 
     private String fotoBase64;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
     //endregion
 
@@ -136,6 +140,7 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .cameraOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -143,6 +148,7 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .galleryOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -167,7 +173,13 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
                 break;
 
             case R.id.material_button_modificar_producto_guardar:
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                materialAlertDialogBuilder.setCancelable(false);
+                materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                alertDialog = materialAlertDialogBuilder.show();
+
                 modificar();
+
                 break;
 
             default:break;
@@ -239,6 +251,7 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
 
     @Override
     public void productoModificado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -246,32 +259,38 @@ public class ActivityModificarProducto extends AppCompatActivity implements View
 
     @Override
     public void productoExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorModificarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoModificarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void productoEliminado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         finish();
     }
 
     @Override
     public void errorEliminarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoEliminarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

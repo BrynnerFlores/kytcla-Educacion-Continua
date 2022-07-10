@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.brynnerflores.kytcla.R;
@@ -19,6 +20,7 @@ import com.brynnerflores.kytcla.model.POJO.Persona;
 import com.brynnerflores.kytcla.presenter.PresenterAcceso;
 import com.brynnerflores.kytcla.view.acceso.iniciar_sesion.ActivityIniciarSesion;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -45,6 +47,9 @@ public class ActivityRegistrarse extends AppCompatActivity implements View.OnCli
     private MaterialButton materialButtonRegistrarse;
 
     private PresenterAcceso presenterAcceso;
+
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
 
     // endregion
 
@@ -128,9 +133,13 @@ public class ActivityRegistrarse extends AppCompatActivity implements View.OnCli
                     final Persona persona = new Persona(foto, nombre, apellido, fecha_nacimiento, sexo, "", "", "", "", true);
                     final Cuenta cuenta = new Cuenta(persona, correo_electronico, password, true);
 
+                    materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                    materialAlertDialogBuilder.setCancelable(false);
+                    materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                    alertDialog = materialAlertDialogBuilder.show();
+
                     presenterAcceso = new PresenterAcceso(this);
                     presenterAcceso.setCallBackRegistrarse(this);
-
                     presenterAcceso.registrarse(cuenta);
                 }
                 break;
@@ -151,22 +160,26 @@ public class ActivityRegistrarse extends AppCompatActivity implements View.OnCli
 
     @Override
     public void registrado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, ActivityIniciarSesion.class));
     }
 
     @Override
     public void emailExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorRegistrar(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoRegistrar(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

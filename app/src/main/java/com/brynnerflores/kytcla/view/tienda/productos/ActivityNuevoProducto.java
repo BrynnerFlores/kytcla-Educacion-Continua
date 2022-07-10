@@ -1,6 +1,7 @@
 package com.brynnerflores.kytcla.view.tienda.productos;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -49,6 +50,9 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
 
     private String fotoBase64;
 
+    private AlertDialog alertDialog;
+    private MaterialAlertDialogBuilder materialAlertDialogBuilder;
+
     //endregion
 
     // region Metodos
@@ -77,7 +81,7 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
             finish();
         });
 
-        final String[] categoria = {"Hogar", "Categoria 2", "Categoria 3", "Categoria 4"};
+        final String[] categoria = {"Hogar"};
         final ArrayAdapter<String> arrayAdapterCategoria = new ArrayAdapter<>(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, categoria);
         autoCompleteTextViewCategoria.setAdapter(arrayAdapterCategoria);
 
@@ -165,6 +169,7 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .cameraOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -172,6 +177,7 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
                                     ImagePicker.Companion.with(this)
                                             .crop(1f, 1f)
                                             .galleryOnly()
+                                            .compress(90)
                                             .start();
                                     break;
 
@@ -196,7 +202,13 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.material_button_nuevo_producto_registrar:
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this);
+                materialAlertDialogBuilder.setCancelable(false);
+                materialAlertDialogBuilder.setView(R.layout.progres_dialog);
+                alertDialog = materialAlertDialogBuilder.show();
+
                 registrar();
+
                 break;
 
             default:break;
@@ -225,22 +237,26 @@ public class ActivityNuevoProducto extends AppCompatActivity implements View.OnC
 
     @Override
     public void productoRegistrado(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         finish();
     }
 
     @Override
     public void productoExiste(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorRegistrarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void errorDesconocidoRegistrarProducto(final String msg) {
+        alertDialog.dismiss();
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

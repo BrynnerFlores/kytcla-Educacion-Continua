@@ -5,9 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.brynnerflores.kytcla.view.tienda.categorias.general.FragmentCategoriaGeneral;
-import com.brynnerflores.kytcla.view.tienda.categorias.FragmentCategoria2;
-import com.brynnerflores.kytcla.view.tienda.categorias.FragmentCategoria3;
-import com.brynnerflores.kytcla.view.tienda.categorias.FragmentCategoria4;
+import com.brynnerflores.kytcla.view.tienda.categorias.FragmentCategoriaHogar;
 
 public class TiendaViewPagerTwoAdapter extends FragmentStateAdapter {
 
@@ -22,14 +20,10 @@ public class TiendaViewPagerTwoAdapter extends FragmentStateAdapter {
             case 0:
                 return new FragmentCategoriaGeneral();
 
+            /*
             case 1:
-                return new FragmentCategoria2();
-
-            case 2:
-                return new FragmentCategoria3();
-
-            case 3:
-                return new FragmentCategoria4();
+                return new FragmentCategoriaHogar();
+             */
 
             default: return null;
         }
@@ -37,6 +31,6 @@ public class TiendaViewPagerTwoAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 1;
     }
 }

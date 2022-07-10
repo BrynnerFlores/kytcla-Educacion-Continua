@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.brynnerflores.kytcla">
+    package="com.brynnerflores.kytcla" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,17 +10,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_kytcla"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
+        <activity
+            android:name=".view.cuenta.ActivityModificarPassword"
+            android:exported="false"
+            android:theme="@style/Theme.Kytcla"/>
         <activity
             android:name=".view.acceso.iniciar_sesion.ActivityRecuperarCuenta"
             android:exported="false"
-            android:theme="@style/Theme.Kytcla.Splash"/>
+            android:theme="@style/Theme.Kytcla.Splash" />
         <activity
-            android:name=".view.ActivityModificarPerfil"
+            android:name=".view.perfil.ActivityModificarPerfil"
             android:exported="false"
             android:theme="@style/Theme.Kytcla" />
         <activity
-            android:name=".ActivityWebView"
+            android:name=".view.ActivityWebView"
             android:exported="false"
             android:theme="@style/Theme.Kytcla" />
         <activity
@@ -38,7 +42,7 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Kytcla.Splash">
+            android:theme="@style/Theme.Kytcla.Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -66,7 +66,7 @@ public class ModelCuenta {
 
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cuenta/actualizar_cuenta.php";
+            final String url = "https://www.kytcla.com/app/cuenta/actualizar_cuenta.php";
 
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
@@ -104,7 +104,7 @@ public class ModelCuenta {
         }
     }
 
-    public void actualizarPassword(final Cuenta cuenta, final String newPassword) {
+    public void actualizarPassword(final Cuenta cuenta, final String password, final String newPassword) {
         try {
             RequestQueue requestQueue;
             Cache cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024); // 1MB cap
@@ -113,7 +113,7 @@ public class ModelCuenta {
 
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cuenta/actualizar_password.php";
+            final String url = "https://www.kytcla.com/app/cuenta/actualizar_password.php";
 
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
@@ -131,6 +131,7 @@ public class ModelCuenta {
                 protected Map<String, String> getParams() {
                     final Map<String, String> params = new HashMap<>();
                     params.put("codigo_cuenta", String.valueOf(cuenta.getCodigoCuenta()));
+                    params.put("password", password);
                     params.put("nuevo_password", newPassword);
                     return params;
                 }
@@ -150,7 +151,7 @@ public class ModelCuenta {
 
             requestQueue.start();
 
-            final String url = "http://192.168.0.104/kytcla/cuenta/recuperar_cuenta.php";
+            final String url = "https://www.kytcla.com/app/cuenta/recuperar_cuenta.php";
 
             final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {

@@ -14,6 +14,7 @@ import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Curso;
 import com.brynnerflores.kytcla.model.POJO.Producto;
 import com.brynnerflores.kytcla.model.POJO.ProductoGuardado;
+import com.brynnerflores.kytcla.model.POJO.ProductoPersonalizado;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -70,8 +71,9 @@ public class AdapterProductoGuardado extends RecyclerView.Adapter<AdapterProduct
         return productosGuardados.size();
     }
 
-    public Producto getProducto(final int index) {
-        return productosGuardados.get(index).getProducto();
+    public ProductoPersonalizado getProducto(final int index) {
+        final Producto producto = productosGuardados.get(index).getProducto();
+        return new ProductoPersonalizado(producto, true);
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

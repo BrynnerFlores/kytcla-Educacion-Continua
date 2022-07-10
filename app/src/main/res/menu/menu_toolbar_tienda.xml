@@ -7,10 +7,4 @@
         android:title="Nuevo Producto"
         android:icon="@drawable/round_add_white_24dp"
         app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/menu_toolbar_tienda_buscar_producto"
-        android:title="Buscar"
-        android:icon="@drawable/round_search_white_24dp"
-        app:showAsAction="always"/>
 </menu>

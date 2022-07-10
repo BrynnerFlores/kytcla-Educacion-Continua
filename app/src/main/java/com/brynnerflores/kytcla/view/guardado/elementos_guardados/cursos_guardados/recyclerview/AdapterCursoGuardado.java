@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brynnerflores.kytcla.R;
 import com.brynnerflores.kytcla.model.POJO.Curso;
 import com.brynnerflores.kytcla.model.POJO.CursoGuardado;
+import com.brynnerflores.kytcla.model.POJO.CursoPersonalizado;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -23,15 +24,15 @@ public class AdapterCursoGuardado extends RecyclerView.Adapter<AdapterCursoGuard
 
     // region Variables
 
-    private final ArrayList<CursoGuardado> cursosGuardados;
+    private final ArrayList<CursoPersonalizado> cursosPersonalizados;
     private View.OnClickListener listener;
 
     // endregion
 
     // region Constructor
 
-    public AdapterCursoGuardado(ArrayList<CursoGuardado> cursosGuardados) {
-        this.cursosGuardados = cursosGuardados;
+    public AdapterCursoGuardado(ArrayList<CursoPersonalizado> cursosPersonalizados) {
+        this.cursosPersonalizados = cursosPersonalizados;
     }
 
     // endregion
@@ -55,7 +56,7 @@ public class AdapterCursoGuardado extends RecyclerView.Adapter<AdapterCursoGuard
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCursoGuardado.ViewHolder holder, int position) {
-        final Curso curso = cursosGuardados.get(position).getCurso();
+        final Curso curso = cursosPersonalizados.get(position).getCurso();
         final byte[] bytes = Base64.getDecoder().decode(curso.getLogoCurso());
         final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         holder.shapeableImageViewImagen.setImageBitmap(bitmap);
@@ -66,11 +67,11 @@ public class AdapterCursoGuardado extends RecyclerView.Adapter<AdapterCursoGuard
 
     @Override
     public int getItemCount() {
-        return cursosGuardados.size();
+        return cursosPersonalizados.size();
     }
 
-    public Curso getCurso(final int index) {
-        return cursosGuardados.get(index).getCurso();
+    public CursoPersonalizado getCurso(final int index) {
+        return cursosPersonalizados.get(index);
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

@@ -124,7 +124,7 @@ public class ActivityIniciarSesion extends AppCompatActivity implements View.OnC
 
             alertDialog.dismiss();
 
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
         } catch (final Exception exception) {
             alertDialog.dismiss();

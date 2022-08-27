@@ -19,3 +19,26 @@ Aplicación para dispositivos móviles con sistema operativo Android con SDK Min
 - **Gestión de Cuenta**
   <br>El usuario tiene la posibilidad de modificar su contraseña.
 ## Capturas de Pantalla
+<img src="/screen_capture/img1.png" height="600"/>
+<img src="/screen_capture/img2.png" height="600"/>
+<img src="/screen_capture/img3.png" height="600"/>
+<img src="/screen_capture/img4.png" height="600"/>
+<img src="/screen_capture/img5.png" height="600"/>
+<img src="/screen_capture/img6.png" height="600"/>
+<img src="/screen_capture/img7.png" height="600"/>
+<img src="/screen_capture/img8.png" height="600"/>
+<img src="/screen_capture/img9.png" height="600"/>
+<img src="/screen_capture/img10.png" height="600"/>
+<img src="/screen_capture/img11.png" height="600"/>
+<img src="/screen_capture/img12.png" height="600"/>
+<img src="/screen_capture/img13.png" height="600"/>
+<img src="/screen_capture/img14.png" height="600"/>
+<img src="/screen_capture/img15.png" height="600"/>
+<img src="/screen_capture/img16.png" height="600"/>
+<img src="/screen_capture/img17.png" height="600"/>
+<img src="/screen_capture/img18.png" height="600"/>
+<img src="/screen_capture/img19.png" height="600"/>
+<img src="/screen_capture/img20.png" height="600"/>
+<img src="/screen_capture/img21.png" height="600"/>
+<img src="/screen_capture/img22.png" height="600"/>
+<img src="/screen_capture/img23.png" height="600"/>
